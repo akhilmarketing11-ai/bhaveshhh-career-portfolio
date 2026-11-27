@@ -1,17 +1,22 @@
-const menuToggle = document.querySelector('.menu-toggle');
-const siteNav = document.querySelector('#site-nav');
+const toggle = document.querySelector('.menu-toggle');
+const navigation = document.querySelector('#navigation');
 
-if (menuToggle && siteNav) {
-  menuToggle.addEventListener('click', () => {
-    const isOpen = menuToggle.getAttribute('aria-expanded') === 'true';
-    menuToggle.setAttribute('aria-expanded', String(!isOpen));
-    siteNav.classList.toggle('is-open', !isOpen);
+if (toggle && navigation) {
+  const closeMenu = () => {
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Open navigation');
+    navigation.classList.remove('is-open');
+  };
+
+  toggle.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!open));
+    toggle.setAttribute('aria-label', open ? 'Open navigation' : 'Close navigation');
+    navigation.classList.toggle('is-open', !open);
   });
 
-  siteNav.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => {
-      menuToggle.setAttribute('aria-expanded', 'false');
-      siteNav.classList.remove('is-open');
-    });
+  navigation.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeMenu();
   });
 }
